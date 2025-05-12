@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fresh Talent Hub</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #6366f1;
+            --accent: #f97316;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --font-main: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-main);
+            background-color: #f3f4f6;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logo svg {
+            width: 32px;
+            height: 32px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        main {
+            min-height: calc(100vh - 140px);
+            padding: 2rem 0;
+        }
+        
+        /* Login Form Styles */
+        .login-container {
+            background-color: white;
+            max-width: 400px;
+            margin: 2rem auto;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .form-footer {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .form-footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Quiz Styles */
+        .quiz-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: none;
+        }
+        
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .quiz-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .timer {
+            background-color: var(--light);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .timer-icon {
+            color: var(--warning);
+        }
+        
+        .question {
+            margin-bottom: 1.5rem;
+        }
+        
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .option {
+            background-color: var(--light);
+            padding: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border: 2px solid transparent;
+        }
+        
+        .option:hover {
+            background-color: #e2e8f0;
+        }
+        
+        .option.selected {
+            border-color: var(--secondary);
+            background-color: #dbeafe;
+        }
+        
+        .option.correct {
+            background-color: #d1fae5;
+            border-color: var(--success);
+        }
+        
+        .option.incorrect {
+            background-color: #fee2e2;
+            border-color: var(--danger);
+        }
+        
+        .quiz-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        .quiz-progress {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .progress-bar {
+            width: 200px;
+            height: 8px;
+            background-color: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0;
+            transition: width 0.3s;
+        }
+        
+        .quiz-results {
+            text-align: center;
+            padding: 2rem;
+            display: none;
+        }
+        
+        .results-score {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-img {
+            height: 150px;
+            background-color: #dbeafe;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .card-content {
+            padding: 1.5rem;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-text {
+            color: #4b5563;
+            margin-bottom: 1rem;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 2rem 0;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .footer-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            color: #94a3b8;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .quiz-header, .quiz-footer {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            .progress-bar {
+                width: 100%;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                    </svg>
+                    Fresh Talent Hub
+                </div>
+                <div class="nav-links">
+                    <a href="#" id="home-link">Home</a>
+                    <a href="#" id="quizzes-link">Quizzes</a>
+                    <a href="#" id="resources-link">Resources</a>
+                    <a href="#" id="login-link">Login</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Login Form -->
+            <div class="login-container" id="login-section">
+                <h2>Login to Hub</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-block">Login</button>
+                    <div class="form-footer">
+                        <p>Don't have an account? <a href="#">Sign up</a></p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" style="display: none;">
+                <h2>Welcome to MedLearn!</h2>
+                <p>Select a quiz topic to begin or explore our resources.</p>
+                
+                <div class="dashboard">
+                    <div class="card" id="anatomy-card">
+                        <div class="card-img">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 3h5v5"></path>
+                                <path d="M8 3H3v5"></path>
+                                <path d="M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3"></path>
+                                <path d="m15 9 6-6"></path>
+                            </svg>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Anatomy Quiz</h3>
+                            <p class="card-text">Test your knowledge of human anatomy with 10 questions.</p>
+                            <button class="btn" onclick="startQuiz('anatomy')">Start Quiz</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card" id="physiology-card">
+                        <div class="card-img">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                            </svg>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Physiology Quiz</h3>
+                            <p class="card-text">Challenge yourself with questions about human physiology.</p>
+                            <button class="btn" onclick="startQuiz('physiology')">Start Quiz</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card" id="pharmacology-card">
+                        <div class="card-img">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m8 3 4 8 5-5 5 15H2L8 3z"></path>
+                            </svg>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Pharmacology Quiz</h3>
+                            <p class="card-text">Test your knowledge of drugs and their effects.</p>
+                            <button class="btn" onclick="startQuiz('pharmacology')">Start Quiz</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="quiz-container" id="quiz-section">
+                <div class="quiz-header">
+                    <h2 class="quiz-title" id="quiz-title">Quiz Title</h2>
+                    <div class="timer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="timer-icon">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <span id="timer-display">00:00</span>
+                    </div>
+                </div>
+                
+                <div class="question" id="current-question">
+                    <div class="question-text" id="question-text">Question text will appear here</div>
+                    <div class="options" id="options-container">
+                        <!-- Options will be generated here -->
+                    </div>
+                </div>
+                
+                <div class="quiz-footer">
+                    <div class="quiz-progress">
+                        <span id="question-progress">Question 1/10</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                    </div>
+                    <button class="btn" id="next-btn">Next Question</button>
+                </div>
+                
+                <div class="quiz-results" id="quiz-results">
+                    <h2>Quiz Completed!</h2>
+                    <div class="results-score" id="results-score">8/10</div>
+                    <p id="results-message">Great job! You're doing well.</p>
+                    <button class="btn" id="restart-btn">Try Again</button>
+                    <button class="btn" id="dashboard-btn">Back to Dashboard</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="#">About</a>
+                    <a href="#">Contact</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Use</a>
+                </div>
+                <div class="copyright">
+                    &copy; 2025 Fresh Talent All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    // DOM Elements
+    const loginSection = document.getElementById('login-section');
+    const dashboardSection = document.getElementById('dashboard-section');
+    const quizSection = document.getElementById('quiz-section');
+    const loginForm = document.getElementById('login-form');
+    const quizTitle = document.getElementById('quiz-title');
+    const questionText = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const nextBtn = document.getElementById('next-btn');
+    const questionProgress = document.getElementById('question-progress');
+    const progressFill = document.getElementById('progress-fill');
+    const quizResults = document.getElementById('quiz-results');
+    const resultsScore = document.getElementById('results-score');
+    const resultsMessage = document.getElementById('results-message');
+    const restartBtn = document.getElementById('restart-btn');
+    const dashboardBtn = document.getElementById('dashboard-btn');
+    const timerDisplay = document.getElementById('timer-display');
+    
+    // Navigation links
+    const homeLink = document.getElementById('home-link');
+    const quizzesLink = document.getElementById('quizzes-link');
+    const resourcesLink = document.getElementById('resources-link');
+    const loginLink = document.getElementById('login-link');
+    
+    // Quiz variables
+    let currentQuiz = null;
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let timer = null;
+    let timeLeft = 0;
+    let selectedOption = null;
+    
+    // Quiz data
+    const quizzes = {
+        anatomy: {
+            title: "Anatomy Quiz",
+            questions: [
+                {
+                    question: "What is the largest organ in the human body?",
+                    options: ["Heart", "Liver", "Skin", "Brain"],
+                    answer: 2
+                },
+                {
+                    question: "How many bones are in the adult human body?",
+                    options: ["206", "300", "150", "187"],
+                    answer: 0
+                },
+                {
+                    question: "Which bone is the longest in the human body?",
+                    options: ["Humerus", "Femur", "Tibia", "Radius"],
+                    answer: 1
+                },
+                {
+                    question: "What is the medical term for the voice box?",
+                    options: ["Pharynx", "Trachea", "Larynx", "Esophagus"],
+                    answer: 2
+                },
+                {
+                    question: "Which part of the brain controls balance and coordination?",
+                    options: ["Cerebrum", "Cerebellum", "Brainstem", "Hypothalamus"],
+                    answer: 1
+                }
+            ],
+            timeLimit: 300 // 5 minutes in seconds
+        },
+        physiology: {
+            title: "Physiology Quiz",
+            questions: [
+                {
+                    question: "What is the normal pH range of human blood?",
+                    options: ["6.8-7.0", "7.35-7.45", "7.8-8.0", "7.0-7.35"],
+                    answer: 1
+                },
+                {
+                    question: "Which hormone regulates blood sugar levels?",
+                    options: ["Estrogen", "Insulin", "Adrenaline", "Thyroxine"],
+                    answer: 1
+                },
+                {
+                    question: "What is the primary function of red blood cells?",
+                    options: ["Fight infection", "Transport oxygen", "Clot blood", "Produce hormones"],
+                    answer: 1
+                },
+                {
+                    question: "Where does gas exchange occur in the lungs?",
+                    options: ["Bronchi", "Trachea", "Alveoli", "Bronchioles"],
+                    answer: 2
+                },
+                {
+                    question: "What is the normal resting heart rate for adults?",
+                    options: ["30-50 bpm", "60-100 bpm", "100-120 bpm", "120-150 bpm"],
+                    answer: 1
+                }
+            ],
+            timeLimit: 300
+        },
+        pharmacology: {
+            title: "Pharmacology Quiz",
+            questions: [
+                {
+                    question: "What is the study of how drugs affect the body called?",
+                    options: ["Pharmacokinetics", "Pharmacodynamics", "Toxicology", "Pharmacology"],
+                    answer: 1
+                },
+                {
+                    question: "Which organ is primarily responsible for drug metabolism?",
+                    options: ["Kidney", "Liver", "Heart", "Lungs"],
+                    answer: 1
+                },
+                {
+                    question: "What does NSAID stand for?",
+                    options: ["Non-Steroidal Anti-Inflammatory Drug", "Non-Specific Anti-Inflammatory Drug", "Neuro-Suppressive Anti-Inflammatory Drug", "Non-Sedating Anti-Inflammatory Drug"],
+                    answer: 0
+                },
+                {
+                    question: "Which class of drugs is used to treat bacterial infections?",
+                    options: ["Antivirals", "Antibiotics", "Antifungals", "Antiparasitics"],
+                    answer: 1
+                },
+                {
+                    question: "What is the first-pass effect in pharmacology?",
+                    options: ["The initial effect of a drug when it enters the bloodstream", "The metabolism of a drug by the liver before it reaches systemic circulation", "The body's immediate rejection of a foreign substance", "The time it takes for a drug to take effect"],
+                    answer: 1
+                }
+            ],
+            timeLimit: 300
+        }
+    };
+    
+    // User data (simulated)
+    const users = [
+        { email: "user@example.com", password: "password123" }
+    ];
+    
+    // Event Listeners
+    loginForm.addEventListener('submit', handleLogin);
+    nextBtn.addEventListener('click', nextQuestion);
+    restartBtn.addEventListener('click', restartQuiz);
+    dashboardBtn.addEventListener('click', showDashboard);
+    
+    // Navigation event listeners
+    homeLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        showDashboard();
+    });
+    
+    quizzesLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        showDashboard();
+    });
+    
+    resourcesLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        alert('Resources section coming soon!');
+    });
+    
+    loginLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        showLogin();
+    });
+    
+    // Functions
+    function handleLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        // Simulate authentication
+        const user = users.find(u => u.email === email && u.password === password);
+        
+        if (user) {
+            showDashboard();
+        } else {
+            alert('Invalid email or password. Try again.');
+        }
+    }
+    
+    function showLogin() {
+        loginSection.style.display = 'block';
+        dashboardSection.style.display = 'none';
+        quizSection.style.display = 'none';
+    }
+    
+    function showDashboard() {
+        loginSection.style.display = 'none';
+        dashboardSection.style.display = 'block';
+        quizSection.style.display = 'none';
+        clearInterval(timer);
+    }
+    
+    function showQuiz() {
+        loginSection.style.display = 'none';
+        dashboardSection.style.display = 'none';
+        quizSection.style.display = 'block';
+    }
+    
+    function startQuiz(quizType) {
+        currentQuiz = quizzes[quizType];
+        currentQuestionIndex = 0;
+        score = 0;
+        timeLeft = currentQuiz.timeLimit;
+        
+        quizTitle.textContent = currentQuiz.title;
+        showQuiz();
+        loadQuestion();
+        startTimer();
+    }
+    
+    function loadQuestion() {
+        const question = currentQuiz.questions[currentQuestionIndex];
+        questionText.textContent = question.question;
+        
+        optionsContainer.innerHTML = '';
+        question.options.forEach((option, index) => {
+            const optionElement = document.createElement('div');
+            optionElement.classList.add('option');
+            optionElement.textContent = option;
+            optionElement.dataset.index = index;
+            optionElement.addEventListener('click', selectOption);
+            optionsContainer.appendChild(optionElement);
+        });
+        
+        // Update progress
+        questionProgress.textContent = `Question ${currentQuestionIndex + 1}/${currentQuiz.questions.length}`;
+        const progressPercentage = ((currentQuestionIndex + 1) / currentQuiz.questions.length) * 100;
+        progressFill.style.width = `${progressPercentage}%`;
+        
+        // Reset selected option
+        selectedOption = null;
+        nextBtn.disabled = true;
+    }
+    
+    function selectOption(e) {
+        // Remove selected class from all options
+        document.querySelectorAll('.option').forEach(opt => {
+            opt.classList.remove('selected');
+        });
+        
+        // Add selected class to clicked option
+        e.target.classList.add('selected');
+        selectedOption = parseInt(e.target.dataset.index);
+        nextBtn.disabled = false;
+    }
+    
+    function nextQuestion() {
+        if (selectedOption === null) return;
+        
+        // Check answer
+        const correctAnswer = currentQuiz.questions[currentQuestionIndex].answer;
+        const options = document.querySelectorAll('.option');
+        
+        // Show correct/incorrect feedback
+        options.forEach((option, index) => {
+            option.classList.remove('correct', 'incorrect');
+            
+            if (index === correctAnswer) {
+                option.classList.add('correct');
+            } else if (index === selectedOption && selectedOption !== correctAnswer) {
+                option.classList.add('incorrect');
+            }
+        });
+        
+        // Update score if correct
+        if (selectedOption === correctAnswer) {
+            score++;
+        }
+        
+        // Move to next question or show results
+        currentQuestionIndex++;
+        if (currentQuestionIndex < currentQuiz.questions.length) {
+            setTimeout(loadQuestion, 1000);
+        } else {
+            setTimeout(showResults, 1000);
+        }
+    }
+    
+    function showResults() {
+        document.querySelector('.question').style.display = 'none';
+        document.querySelector('.quiz-footer').style.display = 'none';
+        quizResults.style.display = 'block';
+        
+        resultsScore.textContent = `${score}/${currentQuiz.questions.length}`;
+        
+        // Custom message based on score
+        const percentage = (score / currentQuiz.questions.length) * 100;
+        if (percentage >= 80) {
+            resultsMessage.textContent = "Excellent work! You have a strong understanding of this topic.";
+        } else if (percentage >= 60) {
+            resultsMessage.textContent = "Good job! You're on the right track.";
+        } else {
+            resultsMessage.textContent = "Keep practicing! Review the material and try again.";
+        }
+        
+        clearInterval(timer);
+    }
+    
+    function restartQuiz() {
+        document.querySelector('.question').style.display = 'block';
+        document.querySelector('.quiz-footer').style.display = 'flex';
+        quizResults.style.display = 'none';
+        
+        startQuiz(currentQuiz.title.toLowerCase().replace(' quiz', ''));
+    }
+    
+    function startTimer() {
+        clearInterval(timer);
+        updateTimerDisplay();
+        
+        timer = setInterval(() => {
+            timeLeft--;
+            updateTimerDisplay();
+            
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                showResults();
+            }
+        }, 1000);
+    }
+    
+    function updateTimerDisplay() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        // Change color when time is running low
+        if (timeLeft <= 60) {
+            timerDisplay.style.color = 'var(--danger)';
+        } else {
+            timerDisplay.style.color = 'inherit';
+        }
+    }
+    
+    // Initialize the page
+    showLogin();
+});
+    </script>
+</body>
+</html>
